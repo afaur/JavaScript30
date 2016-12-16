@@ -59,6 +59,25 @@
 
 <script>
 
+  document.addEventListener('keypress', function(e) {
+    var key = String.fromCharCode(e.keyCode)
+      .toUpperCase()
+      .charCodeAt(0);
+
+    var button = document.querySelector('div[data-key="' + key + '"]');
+    var audio = document.querySelector('audio[data-key="' + key + '"]');
+
+    if (!audio) return
+
+    button.classList.add('playing');
+
+    button.addEventListener('transitionend', function () {
+      button.classList.remove('playing');
+    })
+
+    audio.play();
+  });
+
 </script>
 
 
