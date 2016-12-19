@@ -26,8 +26,10 @@
       misc styles, nothing to do with CSS variables
     */
 
-    body {
-      text-align: center;
+    :root {
+      --img-spacing: 10px;
+      --img-blur: 10px;
+      --img-base: #ffc600;
     }
 
     body {
@@ -36,6 +38,7 @@
       font-family: 'helvetica neue', sans-serif;
       font-weight: 100;
       font-size: 50px;
+      text-align: center;
     }
 
     .controls {
@@ -46,9 +49,23 @@
       width:100px;
     }
 
+    img {
+      border: var(--img-spacing) solid var(--img-base);
+      filter: blur(var(--img-blur));
+    }
+
   </style>
 
-  <script src="sliders.js"></script>
+  <script>
+    var fields = ['spacing', 'blur', 'base']
+    fields.map((fieldName) => {
+      const field = document.querySelector('[name="' + fieldName + '"]')
+      field.addEventListener('change', () => {
+        const newValue = field.value.match(/#/) ? field.value : field.value + 'px'
+        document.body.style.setProperty('--img-' + fieldName, newValue)
+      })
+    })
+  </script>
 
 </body>
 </html>
