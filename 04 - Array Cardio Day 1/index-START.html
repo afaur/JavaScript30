@@ -31,30 +31,118 @@
 
     const people = ['Beck, Glenn', 'Becker, Carl', 'Beckett, Samuel', 'Beddoes, Mick', 'Beecher, Henry', 'Beethoven, Ludwig', 'Begin, Menachem', 'Belloc, Hilaire', 'Bellow, Saul', 'Benchley, Robert', 'Benenson, Peter', 'Ben-Gurion, David', 'Benjamin, Walter', 'Benn, Tony', 'Bennington, Chester', 'Benson, Leana', 'Bent, Silas', 'Bentsen, Lloyd', 'Berger, Ric', 'Bergman, Ingmar', 'Berio, Luciano', 'Berle, Milton', 'Berlin, Irving', 'Berne, Eric', 'Bernhard, Sandra', 'Berra, Yogi', 'Berry, Halle', 'Berry, Wendell', 'Bethea, Erin', 'Bevan, Aneurin', 'Bevel, Ken', 'Biden, Joseph', 'Bierce, Ambrose', 'Biko, Steve', 'Billings, Josh', 'Biondo, Frank', 'Birrell, Augustine', 'Black Elk', 'Blair, Robert', 'Blair, Tony', 'Blake, William'];
 
+    console.log( "-----------------------------------------------------------------------" )
+
     // Array.prototype.filter()
-    // 1. Filter the list of inventors for those who were born in the 1500's
+    console.log( "1. Filter the list of inventors for those who were born in the 1500's" )
+
+    const answer_one = inventors.filter(function(inventor){
+      return inventor.year > 1500 && inventor.year < 1600
+    })
+    console.log( "Answer 1: (log of objects in answer array)" )
+    for( let item of answer_one ) {
+      console.log( item )
+    }
+
+    console.log( "-----------------------------------------------------------------------" )
 
     // Array.prototype.map()
-    // 2. Give us an array of the inventors' first and last names
+    console.log( "2. Give us an array of the inventors' first and last names" )
+
+    const answer_two = inventors.map(function(inventor){
+      return { first: inventor.first, last: inventor.last }
+    })
+    console.log( "Answer 2: (log of objects in answer array)" )
+    for( let item of answer_two ) {
+      console.log( item )
+    }
+
+    console.log( "-----------------------------------------------------------------------" )
 
     // Array.prototype.sort()
-    // 3. Sort the inventors by birthdate, oldest to youngest
+    console.log( "3. Sort the inventors by birthdate, oldest to youngest" )
+
+    const answer_three = inventors.sort(function(a, b){
+      return a.year - b.year
+    })
+    console.log( "Answer 3: (log of objects in answer array)" )
+    for( let item of answer_three ) {
+      console.log( item )
+    }
+
+    console.log( "-----------------------------------------------------------------------" )
 
     // Array.prototype.reduce()
-    // 4. How many years did all the inventors live?
+    console.log( "4. How many years did all the inventors live?" )
 
-    // 5. Sort the inventors by years lived
+    const answer_four = inventors.reduce(function(acc, obj){
+      return acc + (obj.passed - obj.year)
+    }, 0)
+    console.log( "Answer 4: " + answer_four )
 
-    // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
+    console.log( "-----------------------------------------------------------------------" )
+
+    console.log( "5. Sort the inventors by years lived (ascending)" )
+
+    const answer_five = inventors.sort(function(a,b){
+      return (a.passed - a.year) - (b.passed - b.year)
+    })
+    console.log( "Answer 5: (log of objects in answer array)" )
+    for( let item of answer_five ) {
+      console.log( item )
+    }
+
+
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
 
+    // Wiki Api URL
+    // https://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Boulevards_in_Paris&cmlimit=500&format=json
+
+    // Nested element to gather
+    // query -> categorymembers -> title
+
+    // Based on this regex we will also gather names that have 'des' in them
+    fetch('https://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Boulevards_in_Paris&cmlimit=500&format=json&origin=*').then(function(response) {
+      response.json().then(function(json) {
+        console.log( "-----------------------------------------------------------------------" )
+        console.log( "6. create a list of Boulevards in Paris that contain 'de' anywhere in the name" )
+        var answer_six = json.query.categorymembers.filter(function(obj) {
+          return !!obj.title.match(/.+de.+/)
+        })
+        console.log( "Answer 6: (log of object titles in answer array)" )
+        for( let obj of answer_six ) {
+          console.log( obj.title )
+        }
+      })
+    })
+
+    console.log( "-----------------------------------------------------------------------" )
 
     // 7. sort Exercise
-    // Sort the people alphabetically by last name
+    console.log( "7. Sort the people alphabetically by last name" )
+
+    var answer_seven = people.sort(function(a,b){
+      return a.localeCompare(b)
+    })
+    console.log( "Answer 7: " + answer_seven )
+
+    console.log( "-----------------------------------------------------------------------" )
 
     // 8. Reduce Exercise
-    // Sum up the instances of each of these
+    console.log( "8. Sum up the instances of each of these" )
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+
+    var answer_eight = data.reduce(function(memo, item) {
+      memo.hasOwnProperty(item) ? memo[item] += 1 : Object.assign(memo, { [item]: 1 })
+      return memo
+    }, {})
+
+    console.log( "Answer 8: " )
+    for( let key of Object.keys(answer_eight) ) {
+      console.log( key + ": " + answer_eight[key] )
+    }
+
+    console.log( "-----------------------------------------------------------------------" )
 
   </script>
 </body>
